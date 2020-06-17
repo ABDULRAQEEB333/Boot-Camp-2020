@@ -1,12 +1,13 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Bootcamp 2021 ur
+name: CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
     branches: [ master ]
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -18,18 +19,28 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2  
+    - uses: actions/checkout@v2
 
     # Runs a single command using the runners shell
-    - name: Installing Node module
-      run: actions/setup-node@2-beta
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v1.4.2
       with:
-        node-version: 12.x   
+        version: 12
+
     # Runs a set of commands using the runners shell
-    - name: Installing Surge
+    - name: GitHub Action for Yarn
+      uses: Borales/actions-yarn@v2.3.0
+      with:
+      # Yarn command
+        cmd: install
+    
+    - name: Creating Build
+      run: yarn build
+    
+    - name: Installinbg surge
       run: npm install -g surge
+    
+    - name: Deploying on surge
     - name : deploy using surge
-      run : surge./ bootu.surge.sh --token $ {{ secrets.SURGETEKON
-      }}
-        echo Add other actions to build,
-        echo test, and deploy your project.
+      run : surge./ bootu.surge.sh --token $ {{ secrets.SURGETEKON }}
+      
